@@ -57,6 +57,50 @@ n == strength.length
 1 <= strength[i] <= 106
 */
 
+/*
+trying all the permutations 
+*/
+
+class Solution {
+public:
+    int solve(vector<int>& strength, int k){
+        int time = 0, n = strength.size();
+
+        for(int i = 0; i < n; i++){
+            int x = 1 + i * k;
+            time += (strength[i] + x - 1) / x;
+        }
+
+        return time;
+    }
+    void permututations(vector<int>& strength, int k, vector<int> &temp, vector<bool> &vis, int &minTime){
+        if(temp.size() == strength.size()){
+            minTime = min(minTime, solve(temp, k));
+            return;
+        }
+
+        for(int i = 0; i < strength.size(); i++){
+            if(!vis[i]){
+                temp.push_back(strength[i]);
+                vis[i] = true;
+                permututations(strength, k, temp, vis, minTime);
+                vis[i] = false;
+                temp.pop_back();
+            }
+        }
+    }
+    int findMinimumTime(vector<int>& strength, int k) {
+        vector<int> temp;
+        vector<bool> vis(strength.size(), false);
+        int minTime = INT_MAX;
+        permututations(strength, k, temp, vis, minTime);
+        return minTime;
+    }
+};
+
+// Time Complexity:- O(n! x n)
+// Space Complexity:- O(n)(temp array) + O(n)(vis array) + O(n)(recursive stack space)
+
 class Solution {
 public:
     int solve(vector<int>& strength, int k){
@@ -80,3 +124,6 @@ public:
         return minTime;
     }
 };
+
+// Time Complexity:- O(n! x n) + O(n log n)
+// Space Complexity:- O(1)
